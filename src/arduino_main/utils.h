@@ -1,6 +1,6 @@
 
 
-/*-------------------- motor pins ----------------------*/
+/*-------------------- motors ----------------------*/
 
 // Enable/Disable motor control.
 //  HIGH: motor control enabled
@@ -20,19 +20,28 @@
 #define PIN_Motor_PWMB 6
 
 
-/*-------------------- ultrasound pins ----------------------*/
+/*-------------------- ultrasound ----------------------*/
 #define TRIG_PIN 13  
 #define ECHO_PIN 12 
 
+QueueHandle_t ultrasoundQueue;
 
 
-/*-------------------- infrared pins ----------------------*/
+/*-------------------- infrared ----------------------*/
 #define PIN_ITR20001_LEFT   A2
 #define PIN_ITR20001_MIDDLE A1
 #define PIN_ITR20001_RIGHT  A0
 
+struct InfraredInfo {
+  unsigned int    r_value;    // value of right infrared sensor   
+  unsigned int    c_value;    // value of center infrared sensor
+  unsigned int    l_value;    // value of left infrared sensor
+};
 
-/*-------------------- led pins ----------------------*/
+QueueHandle_t infraredQueue;
+
+
+/*-------------------- led ----------------------*/
 #define PIN_RBGLED 4
 #define NUM_LEDS 1
 
