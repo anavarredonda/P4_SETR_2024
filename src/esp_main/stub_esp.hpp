@@ -1,23 +1,34 @@
 #include <Arduino.h>
+// #include <ArduinoJson.h>
 
 // Possible actions to send
 #define CONNECTED_TO_SERVER "CTS"
-#define START_LAP "SL"
-#define END_LAP "EL"
-#define OBSTACLE_DETECTED "OD"
-#define LINE_LOST "LL"
-#define PING "P"
-#define INIT_LINE_SEARCH "ILS"
-#define STOP_LINE_SEARCH "STLS"
-#define LINE_FOUND "LF"
-#define VISIBLE_LINE "VL"
+#define CONNECTED_TO_MQTT "CTMQ"
+#define START_LAP "START_LAP"
+#define END_LAP "END_LAP"
+#define OBSTACLE_DETECTED "OBSTACLE_DETECTED"
+#define LINE_LOST "LINE_LOST"
+#define PING "PING"
+#define INIT_LINE_SEARCH "INIT_LINE_SEARCH"
+#define STOP_LINE_SEARCH "STOP_LINE_SEARCH"
+#define LINE_FOUND "LINE_FOUND"
+#define VISIBLE_LINE "VISIBLE_LINE"
 
 // Group identifiers
-#define GROUP_NAME Francesco
-#define GROUP_ID 3
+#define TEAM_NAME "Francesco"
+#define TEAM_ID 3
+#define MQTT_TOPIC "/SETR/2024/3/"
 
-void serial_send(HardwareSerial&, String);
+// Sends a message through the provided serial port
+void serial_send(HardwareSerial& serial, String msg);
 
-String serial_recv(HardwareSerial&);
+// Returns the message received in that serial port,
+// returns "" if there is no message to receive
+String serial_recv(HardwareSerial& serial);
 
-void proccess_action(String, String*, int*);
+// Updates the action and value values with the ones received
+void proccess_serial_msg(String msg, String& action, int& value);
+
+// Returns the json message in String format
+// for the action and the value provided
+String create_json_msg(String action, int value);
