@@ -1,6 +1,6 @@
 #include "stub_esp.hpp"
 // #include "nava_password.h"
-// #include "../../../cred.h"
+#include "../../../cred.h"
 #include <WiFi.h>
 #include <Adafruit_MQTT.h>
 #include <Adafruit_MQTT_Client.h>
@@ -52,9 +52,11 @@ void setup() {
   Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2);
 
   // Connect to WIFI
+  serial_send(Serial, "Starting connection proccess");
   WiFi.disconnect(true); 
   WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD); 
   while (WiFi.status() != WL_CONNECTED) {
+    serial_send(Serial, "Trying to connect to wifi");
     delay(500);
   }
   serial_send(Serial, "Connected to wifi");
@@ -63,6 +65,7 @@ void setup() {
 
   // Connect to MQTT
   while (!mqtt_connect()) {
+    serial_send(Serial, "Trying to connect to MQTT");
     delay(500);
   }
   serial_send(Serial, "Connected to MQTT");
@@ -80,18 +83,19 @@ void loop() {
     json_msg = create_json_msg(action, value);
 
     // Publish the message until it's correctly published
-    while (!publisher.publish(MQTT_TOPIC, json_msg.c_str())) {
-      delay(10);
-    }
+    // while (!publisher.publish(MQTT_TOPIC, json_msg.c_str())) {
+    //   delay(10);
+    // }
+    publisher.publish(MQTT_TOPIC, json_msg.c_str());
     serial_send(Serial, "Message published");
-
-  } else {
-    mqtt.ping(); // To keep conexion alive
   }
+  // } else {
+  //   mqtt.ping(); // To keep conexion alive
+  // }
 
   // Make sure there is still connection to the server
-  while (!mqtt_connect()) {
-    serial_send(Serial, "Reconnecting to MQTT");
-  }
+  // while (!mqtt_connect()) {
+  //   serial_send(Serial, "Reconnecting to MQTT");
+  // }
 
 }
