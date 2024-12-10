@@ -54,12 +54,13 @@ void setup() {
 
   // Begin serial communication to communicate with Arduino UNO 
   Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2);
+
   delay(500);
 
   // Connect to WIFI
   serial_send(Serial, "Starting connection proccess");
   WiFi.disconnect(true); 
-  //WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD); 
+  // WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD); // for eduroam
   WiFi.begin(ssid, EAP_PASSWORD); 
   while (WiFi.status() != WL_CONNECTED) {
     serial_send(Serial, "Trying to connect to wifi");
@@ -77,31 +78,42 @@ void setup() {
   serial_send(Serial, "Connected to MQTT");
   // Inform Arduino UNO that connection to MQTT is complete
   serial_send(Serial2, CONNECTED_TO_MQTT);
+
+  // to try
+  action = START_LAP;
+  value = 0;
 }
 
 void loop() {
-  msg_from_ard = serial_recv(Serial2);
-
-  if (msg_from_ard != "") {
-    proccess_serial_msg(msg_from_ard, action, value);
-
-    // Create the message depending on the action
-    json_msg = create_json_msg(action, value);
-
-    // Publish the message until it's correctly published
-    // while (!publisher.publish(MQTT_TOPIC, json_msg.c_str())) {
-    //   delay(10);
-    // }
-    publisher.publish(MQTT_TOPIC, json_msg.c_str());
-    serial_send(Serial, "Message published");
-  }
-  // } else {
-  //   mqtt.ping(); // To keep conexion alive
-  // }
-
-  // Make sure there is still connection to the server
-  // while (!mqtt_connect()) {
-  //   serial_send(Serial, "Reconnecting to MQTT");
-  // }
-
+  json_msg = create_json_msg(action, value);
+  publisher.publish(MQTT_TOPIC, json_msg.c_str());
+  serial_send(Serial, "Message published");
+  delay(1000);
 }
+
+// void loop() {
+//   msg_from_ard = serial_recv(Serial2);
+
+//   if (msg_from_ard != "") {
+//     proccess_serial_msg(msg_from_ard, action, value);
+
+//     // Create the message depending on the action
+//     json_msg = create_json_msg(action, value);
+
+//     // Publish the message until it's correctly published
+//     // while (!publisher.publish(MQTT_TOPIC, json_msg.c_str())) {
+//     //   delay(10);
+//     // }
+//     publisher.publish(MQTT_TOPIC, json_msg.c_str());
+//     serial_send(Serial, "Message published");
+//   }
+//   // } else {
+//   //   mqtt.ping(); // To keep conexion alive
+//   // }
+
+//   // Make sure there is still connection to the server
+//   // while (!mqtt_connect()) {
+//   //   serial_send(Serial, "Reconnecting to MQTT");
+//   // }
+
+// }
