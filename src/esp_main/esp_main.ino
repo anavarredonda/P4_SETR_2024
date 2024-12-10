@@ -1,6 +1,6 @@
 #include "stub_esp.hpp"
 // #include "nava_password.h"
-#include "../../../cred.h"
+// #include "../../../cred.h"
 #include <WiFi.h>
 #include <Adafruit_MQTT.h>
 #include <Adafruit_MQTT_Client.h>
