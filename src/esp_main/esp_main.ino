@@ -1,6 +1,8 @@
 #include "stub_esp.hpp"
 // #include "nava_password.h"
 // #include "../../../cred.h"
+#include "casa_wifi.h"
+
 #include <WiFi.h>
 #include <Adafruit_MQTT.h>
 #include <Adafruit_MQTT_Client.h>
@@ -12,7 +14,9 @@
 
 // For WIFI connection
 //SSID NAME
-const char* ssid = "eduroam"; // eduroam SSID
+//const char* ssid = "eduroam"; // eduroam SSID
+
+const char* ssid = "JAZZTEL_r7bP";
 
 // For MQTT use
 WiFiClient wificlient; // Wifi client to connect MQTT to wifi
@@ -50,11 +54,13 @@ void setup() {
 
   // Begin serial communication to communicate with Arduino UNO 
   Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2);
+  delay(500);
 
   // Connect to WIFI
   serial_send(Serial, "Starting connection proccess");
   WiFi.disconnect(true); 
-  WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD); 
+  //WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD); 
+  WiFi.begin(ssid, EAP_PASSWORD); 
   while (WiFi.status() != WL_CONNECTED) {
     serial_send(Serial, "Trying to connect to wifi");
     delay(500);
