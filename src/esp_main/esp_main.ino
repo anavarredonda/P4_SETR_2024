@@ -86,7 +86,8 @@ void setup() {
 
 void loop() {
   json_msg = create_json_msg(action, value);
-  publisher.publish(MQTT_TOPIC, json_msg.c_str());
+  serial_send(Serial, json_msg.c_str());
+  publisher.publish(json_msg.c_str());
   serial_send(Serial, "Message published");
   delay(1000);
 }

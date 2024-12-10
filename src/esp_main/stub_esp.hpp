@@ -1,5 +1,5 @@
 #include <Arduino.h>
-// #include <ArduinoJson.h>
+#include <ArduinoJson.h>
 
 // Possible actions to send
 #define CONNECTED_TO_SERVER "CTS"

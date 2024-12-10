@@ -1,6 +1,6 @@
 #include "stub_esp.hpp"
 
-// #define JSON_SIZE 128
+#define JSON_SIZE 128
 
 // Sends the message adding {}
 void serial_send(HardwareSerial& serial, String msg)
@@ -65,52 +65,52 @@ void proccess_serial_msg(String msg, String& action, int& value)
   }
 }
 
-// // Creates the json message in String format
-// String create_json_msg(String action, int value) {
-//   // Create json
-//   StaticJsonDocument<JSON_SIZE> jsondoc;
-
-//   // Fill json parameters
-//   jsondoc["team_name"] = TEAM_NAME;
-//   jsondoc["id"] = TEAM_ID;
-//   jsondoc["action"] = action;
-
-//   if (action == PING || action == END_LAP) {
-//     jsondoc["time"] = value;
-  
-//   } else if (action == OBSTACLE_DETECTED) {
-//     jsondoc["distance"] = value;
-  
-//   } else if (action == VISIBLE_LINE) {
-//     jsondoc["value"] = value;
-//   }
-
-//   String jsonString;
-//   serializeJson(jsondoc, jsonString);
-
-//   return jsonString;  // Returns json in String format
-// }
-
-// Returns the json message in String format
+// Creates the json message in String format
 String create_json_msg(String action, int value) {
-  String jsonString = "{";
-  // Add fixed parameters
-  jsonString += "\"team_name\":\"" + String(TEAM_NAME) + "\",";
-  jsonString += "\"id\":\"" + String(TEAM_ID) + "\",";
-  jsonString += "\"action\":\"" + action + "\",";
+  // Create json
+  StaticJsonDocument<JSON_SIZE> jsondoc;
+
+  // Fill json parameters
+  jsondoc["team_name"] = TEAM_NAME;
+  jsondoc["id"] = TEAM_ID;
+  jsondoc["action"] = action;
 
   if (action == PING || action == END_LAP) {
-    jsonString += "\"time\":" + String(value);
+    jsondoc["time"] = value;
   
   } else if (action == OBSTACLE_DETECTED) {
-    jsonString += "\"distance\":" + String(value);
+    jsondoc["distance"] = value;
   
   } else if (action == VISIBLE_LINE) {
-    jsonString += "\"value\":" + String(value);
+    jsondoc["value"] = value;
   }
 
-  // End json msg
-  jsonString += "}";
+  String jsonString;
+  serializeJson(jsondoc, jsonString);
 
-  return jsonString;  // Returns json msg in string format
+  return jsonString;  // Returns json in String format
 }
+
+// // Returns the json message in String format
+// String create_json_msg(String action, int value) {
+//   String jsonString = "{";
+//   // Add fixed parameters
+//   jsonString += "\"team_name\":\"" + String(TEAM_NAME) + "\",";
+//   jsonString += "\"id\":\"" + String(TEAM_ID) + "\",";
+//   jsonString += "\"action\":\"" + action;
+
+//   if (action == PING || action == END_LAP) {
+//     jsonString += "\",time\":" + String(value);
+  
+//   } else if (action == OBSTACLE_DETECTED) {
+//     jsonString += "\",distance\":" + String(value);
+  
+//   } else if (action == VISIBLE_LINE) {
+//     jsonString += "\",value\":" + String(value);
+//   }
+
+//   // End json msg
+//   jsonString += "}";
+
+//   return jsonString;  // Returns json msg in string format
+// }
